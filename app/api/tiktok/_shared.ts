@@ -22,6 +22,7 @@ const TIKTOK_ENDPOINT =
  *  Types
  *  ========================= */
 type TikTokEventName =
+  | "PageView"
   | "ViewContent"
   | "AddToCart"
   | "InitiateCheckout"
@@ -152,6 +153,14 @@ export async function sendTikTokEvent(
     test_event_code, // body-supplied (env takes precedence)
     ...props
   } = body ?? {};
+
+  // Require event_id so browser + server can de-duplicate reliably
+  if (!event_id) {
+    return NextResponse.json(
+      { ok: false, error: "event_id required" },
+      { status: 400 }
+    );
+  }
 
   const url = new URL(req.url);
   const ip =

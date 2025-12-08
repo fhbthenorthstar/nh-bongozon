@@ -4,6 +4,7 @@
 import { PropsWithChildren } from "react";
 import { usePathname } from "next/navigation";
 import FomoToast from "./FomoToast";
+import TikTokPageView from "./TikTokPageView";
 
 export default function EngagementAndPixels({ children }: PropsWithChildren) {
   const pathname = usePathname() || "";
@@ -16,6 +17,7 @@ export default function EngagementAndPixels({ children }: PropsWithChildren) {
   return (
     <>
       {children}
+      <TikTokPageView />
       <FomoToast />
     </>
   );

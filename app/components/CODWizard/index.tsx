@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useRef, useEffect } from "react";
+import { ttqIdentifyOnce, normalizePhoneBD } from "@/app/lib/tiktok";
 
 import CourseStep from "./CourseStep";
 import DeliveryStep from "./DeliveryStep";
@@ -178,16 +179,12 @@ export default function OrderWizardv3({ channel = "Unknown" }) {
 
   const firedATC = useRef(false);
   const firedIC = useRef(false);
+  const lastIdentified = useRef<string | null>(null);
 
   useEffect(() => {
     if (!firedATC.current) {
       trackTikTokAddToCart(selected).catch(() => {});
       firedATC.current = true;
-    }
-
-    if (!firedIC.current) {
-      trackTikTokInitiateCheckout(selected, {}).catch(() => {});
-      firedIC.current = true;
     }
 
     dlPush({
@@ -211,6 +208,25 @@ export default function OrderWizardv3({ channel = "Unknown" }) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // once
+
+  // Early identification once we have a plausible phone
+  useEffect(() => {
+    const normalized = normalizePhoneBD(phone || "");
+    if (!normalized || normalized.length < 12) return;
+    if (lastIdentified.current === normalized) return;
+    const t = setTimeout(() => {
+      lastIdentified.current = normalized;
+      ttqIdentifyOnce({ phone, external_id: normalized }).catch(() => {});
+    }, 500);
+    return () => clearTimeout(t);
+  }, [phone]);
+
+  // Fire IC once when form is ready with user data
+  useEffect(() => {
+    if (firedIC.current || !canSubmit) return;
+    firedIC.current = true;
+    trackTikTokInitiateCheckout(selected, { name, phone, address }).catch(() => {});
+  }, [address, canSubmit, name, phone, selected]);
 
   return (
     <section

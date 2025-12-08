@@ -1,8 +1,15 @@
-import { PRODUCT_ID, UNIT_PRICE } from "./constants";
+import { PRODUCT_ID, UNIT_PRICE, TT_PRODUCT_CATEGORY } from "./constants";
 
 /** Keep identical payload shape (with item_price) */
 export const contentsForPixel = (qty: number) => [
-  { id: PRODUCT_ID, quantity: qty, item_price: UNIT_PRICE },
+  {
+    id: PRODUCT_ID,
+    quantity: qty,
+    item_price: UNIT_PRICE,
+    brand: "Night Horse",
+    content_type: "product",
+    content_category: TT_PRODUCT_CATEGORY,
+  },
 ];
 export const contentsForCAPI = contentsForPixel;
 

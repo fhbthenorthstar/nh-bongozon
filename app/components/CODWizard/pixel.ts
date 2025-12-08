@@ -10,33 +10,31 @@ import {
   TT_PRODUCT_CATEGORY,
   UNIT_PRICE,
 } from "./constants";
-import {
-  baseUrl,
-  contentsForCAPI,
-} from "./event-helpers";
+import { baseUrl, contentsForCAPI } from "./event-helpers";
 import type { Bundle } from "./types";
 
 /** TikTok AddToCart (matches v1) */
 export async function trackTikTokAddToCart(bundle: Bundle) {
   const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
   const eventID = `tt-atc-${newEventId()}`;
+  const contents = contentsForCAPI(bundle.qty);
 
   ttqTrack(
     "AddToCart",
     {
-      contents: [
-        {
-          content_id: PRODUCT_ID,
-          content_type: "product",
-          content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-          price: UNIT_PRICE,
-          num_items: bundle.qty,
-          brand: "Night Horse",
-        },
-      ],
+      contents: contents.map((c) => ({
+        content_id: c.id,
+        content_type: c.content_type,
+        content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+        price: c.item_price,
+        quantity: c.quantity,
+        brand: c.brand,
+      })),
       value,
       currency: CURRENCY,
       content_category: TT_PRODUCT_CATEGORY,
+      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+      content_type: "product",
     },
     eventID
   );
@@ -53,14 +51,7 @@ export async function trackTikTokAddToCart(bundle: Bundle) {
       content_name: `${PRODUCT_NAME} — ${bundle.label}`,
       // IMPORTANT: same category as v1 for AddToCart
       content_category: TT_PRODUCT_CATEGORY,
-      contents: [
-        {
-          id: PRODUCT_ID,
-          item_price: UNIT_PRICE,
-          quantity: bundle.qty,
-          brand: "Night Horse",
-        },
-      ],
+      contents,
     }),
     keepalive: true,
   })
@@ -76,6 +67,7 @@ export async function trackTikTokInitiateCheckout(
 ) {
   const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
   const eventID = `tt-ic-${newEventId()}`;
+  const contents = contentsForCAPI(bundle.qty);
 
   await ttqIdentifyOnce({
     phone: customer.phone,
@@ -85,19 +77,20 @@ export async function trackTikTokInitiateCheckout(
   ttqTrack(
     "InitiateCheckout",
     {
-      contents: [
-        {
-          content_id: PRODUCT_ID,
-          content_type: "product",
-          content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-          content_category: TT_PRODUCT_CATEGORY,
-          price: UNIT_PRICE,
-          num_items: bundle.qty,
-          brand: "Night Horse",
-        },
-      ],
+      contents: contents.map((c) => ({
+        content_id: c.id,
+        content_type: c.content_type,
+        content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+        content_category: c.content_category,
+        price: c.item_price,
+        quantity: c.quantity,
+        brand: c.brand,
+      })),
       value,
       currency: CURRENCY,
+      content_category: TT_PRODUCT_CATEGORY,
+      content_type: "product",
+      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
     },
     eventID
   );
@@ -114,15 +107,10 @@ export async function trackTikTokInitiateCheckout(
       content_name: `${PRODUCT_NAME} — ${bundle.label}`,
       // IMPORTANT: same category as v1 for InitiateCheckout
       content_category: TT_PRODUCT_CATEGORY,
-      contents: [
-        {
-          id: PRODUCT_ID,
-          item_price: UNIT_PRICE,
-          quantity: bundle.qty,
-          brand: "Night Horse",
-        },
-      ],
+      contents,
       phone: customer.phone,
+      name: customer.name,
+      address: customer.address,
       external_id: normalizePhoneBD(customer.phone || ""),
     }),
   })
@@ -141,6 +129,7 @@ export async function trackTikTokPurchase(
   const orderId =
     forcedOrderId ?? `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   const eventID = `tt-pur-${newEventId()}`;
+  const contents = contentsForCAPI(bundle.qty);
 
   await ttqIdentifyOnce({
     phone: customer.phone,
@@ -150,19 +139,21 @@ export async function trackTikTokPurchase(
   ttqTrack(
     "Purchase",
     {
-      contents: [
-        {
-          content_id: PRODUCT_ID,
-          content_type: "product",
-          content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-          content_category: TT_PRODUCT_CATEGORY,
-          price: UNIT_PRICE,
-          num_items: bundle.qty,
-          brand: "Night Horse",
-        },
-      ],
+      contents: contents.map((c) => ({
+        content_id: c.id,
+        content_type: c.content_type,
+        content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+        content_category: c.content_category,
+        price: c.item_price,
+        quantity: c.quantity,
+        brand: c.brand,
+      })),
       value,
       currency: CURRENCY,
+      content_category: TT_PRODUCT_CATEGORY,
+      content_type: "product",
+      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+      order_id: orderId,
     },
     eventID
   );
@@ -179,7 +170,7 @@ export async function trackTikTokPurchase(
       content_type: "product",
       content_name: `${PRODUCT_NAME} — ${bundle.label}`,
       content_category: TT_PRODUCT_CATEGORY,
-      contents: contentsForCAPI(bundle.qty),
+      contents,
       phone: customer.phone,
       name: customer.name,
       address: customer.address,
