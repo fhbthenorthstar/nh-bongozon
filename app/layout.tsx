@@ -4,7 +4,6 @@ import Script from "next/script";
 
 import "./globals.css";
 import Footer from "./components/Footer";
-import FacebookPixel from "./components/FacebookPixel";
 import SeoJsonLd from "./components/SeoJsonLd";
 import TikTokPixel from "./components/TikTokPixel";
 import EngagementAndPixels from "./components/EngagementAndPixels";
@@ -24,12 +23,6 @@ export const metadata: Metadata = {
 
   description:
     "নাইট হর্স — নিরাপদ রিকভারি ফুড সাপ্লিমেন্ট",
-
-  verification: {
-    other: {
-      "facebook-domain-verification": "gy6lheotw63wivjymizgs0wqjs1xfr",
-    },
-  },
 
   alternates: {
     canonical: "/",
@@ -108,7 +101,6 @@ export default function RootLayout({
         </noscript>
         <SeoJsonLd />
         <EngagementAndPixels>
-          <FacebookPixel />
           <TikTokPixel />
           <Suspense fallback={null}>
              <TikTokClickIdSetter />

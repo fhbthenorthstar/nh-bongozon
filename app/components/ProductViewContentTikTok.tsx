@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { newEventId } from "../lib/fbpixel"; // reuse your ID helper
+import { newEventId } from "../lib/eventIds";
 import { ttqTrack } from "../lib/tiktok";
 
 const PRODUCT_ID = "night-horse-500g";

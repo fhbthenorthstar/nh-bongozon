@@ -2,7 +2,6 @@ import DosageSection from "./components/DosageSection";
 import HowItWorks from "./components/HowItWorks";
 import FaqSection from "./components/FaqSection";
 import ViolentFeatures from "./components/ViolentFeatures";
-import ProductViewContent from "./components/ProductViewContent";
 import ProductViewContentTikTok from "./components/ProductViewContentTikTok";
 import StickyNightTicker from "./components/StickyNightTicker";
 import OrderWizardv3 from "./components/CODWizard";
@@ -12,7 +11,6 @@ import GuaranteeStrip from "./components/GuaranteeStrip";
 export default function Tiktok() {
   return (
     <div>
-      <ProductViewContent />
       <ProductViewContentTikTok />
       <StickyNightTicker />
       <GuaranteeStrip/>

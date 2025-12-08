@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Privacy Policy | Night Horse",
   description:
-    "How Night Horse collects, uses, and shares information, including use of Meta Pixel/Conversions API and your privacy rights.",
+    "How Night Horse collects, uses, and shares information, including use of TikTok Pixel/Events API and your privacy rights.",
   alternates: { canonical: "/privacy" }, // or "/terms"
   openGraph: {
     modifiedTime: "2025-09-15T00:00:00+06:00", // update when you truly edit
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
               <strong className="text-white"> Night Horse</strong> (“we”, “us”,
               or “our”) collects, uses, and shares information when you visit
               our website, make a purchase, contact us, or interact with our
-              advertising on Meta (Facebook/Instagram) and other platforms.
+              advertising on TikTok and other platforms.
             </p>
           </div>
         </header>
@@ -141,7 +141,7 @@ export default function PrivacyPage() {
             3) How we share information
           </a>
           <a href="#cookies" className="hover:underline text-white/90">
-            4) Cookies, Meta Pixel & Conversions API
+            4) Cookies & TikTok Pixel
           </a>
           <a href="#your-choices" className="hover:underline text-white/90">
             5) Your choices & opt-out
@@ -187,7 +187,7 @@ export default function PrivacyPage() {
             </li>
             <li>
               <strong className="text-white">Cookies & similar tech:</strong>{" "}
-              pixels, tags, SDKs (including Meta Pixel) for analytics &
+              pixels, tags, SDKs (including TikTok Pixel) for analytics &
               advertising.
             </li>
             <li>
@@ -211,8 +211,8 @@ export default function PrivacyPage() {
             <li>Process orders, payments, deliveries, and customer support</li>
             <li>Personalize content and measure site performance</li>
             <li>
-              Deliver and measure advertising (including on Meta/Facebook &
-              Instagram), and run retargeting
+              Deliver and measure advertising (including on TikTok), and run
+              retargeting
             </li>
             <li>Detect, prevent, and address fraud or misuse</li>
             <li>Comply with legal obligations</li>
@@ -227,55 +227,55 @@ export default function PrivacyPage() {
           <p className="mt-3 text-sm text-white/80">
             We may share limited data with trusted service providers (e.g.,
             hosting, analytics, payment, logistics, customer support) and
-            advertising partners (e.g., Meta, Google) to help us operate our
-            business. When we work with Meta (including Meta Pixel and
-            Conversions API), we and Meta may act as{" "}
+            advertising partners (e.g., TikTok, Google) to help us operate our
+            business. When we work with advertising partners (including TikTok
+            Pixel and Events API), we and those partners may act as{" "}
             <strong className="text-white">independent controllers</strong> for
             certain processing activities. Your data may also be disclosed when
             legally required or to protect our rights.
           </p>
         </section>
 
-        {/* 4. Cookies & Meta */}
+        {/* 4. Cookies & TikTok */}
         <section id="cookies" className="mb-10">
           <h2 className="text-xl font-semibold text-white">
-            4) Cookies, Meta Pixel & Conversions API
+            4) Cookies & TikTok Pixel
           </h2>
           <p className="mt-3 text-sm text-white/80">
             We use cookies and similar technologies to remember your settings,
             analyze site performance, and deliver relevant ads. The{" "}
-            <strong className="text-white">Meta Pixel</strong> and/or{" "}
-            <strong className="text-white">Meta Conversions API</strong> help us
+            <strong className="text-white">TikTok Pixel</strong> and{" "}
+            <strong className="text-white">TikTok Events API</strong> help us
             measure ad performance, reach people likely to be interested in our
             products, and run retargeting. Data collected may include device
             identifiers, page views, events (e.g., add-to-cart, purchase), and
             hashed contact information (if provided).
           </p>
           <p className="mt-3 text-sm text-white/80">
-            For details on how Meta processes data, see Meta’s Privacy Policy
-            and Ad Preferences tools:
+            For details on how TikTok processes data, see TikTok’s Privacy
+            Policy and ad controls:
           </p>
           <ul className="mt-2 list-disc pl-6 text-sm text-white/80">
             <li>
-              Meta Privacy Policy:{" "}
+              TikTok Privacy Policy:{" "}
               <a
-                href="https://www.facebook.com/privacy/policy"
+                href="https://www.tiktok.com/legal/page/row/privacy-policy/en"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline"
               >
-                facebook.com/privacy/policy
+                tiktok.com/legal/page/row/privacy-policy/en
               </a>
             </li>
             <li>
-              Facebook Ad Preferences:{" "}
+              TikTok Ad Settings:{" "}
               <a
-                href="https://www.facebook.com/adpreferences/ad_settings"
+                href="https://www.tiktok.com/settings/ads"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline"
               >
-                facebook.com/adpreferences/ad_settings
+                tiktok.com/settings/ads
               </a>
             </li>
           </ul>
@@ -300,16 +300,16 @@ export default function PrivacyPage() {
               link to manage advertising cookies (where offered).
             </li>
             <li>
-              <strong className="text-white">Meta ads:</strong> Use{" "}
+              <strong className="text-white">TikTok ads:</strong> Use{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline"
-                href="https://www.facebook.com/adpreferences/ad_settings"
+                href="https://www.tiktok.com/settings/ads"
               >
-                Facebook Ad Preferences
+                TikTok Ad Settings
               </a>{" "}
-              and Instagram ad settings.
+              to adjust personalization.
             </li>
             <li>
               <strong className="text-white">Email:</strong> You can unsubscribe
@@ -486,20 +486,21 @@ export default function PrivacyPage() {
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <div className="text-sm">
-                <strong>Meta Pixel</strong>: ওয়েবসাইটে অ্যাড পারফরম্যান্স
+                <strong>TikTok Pixel</strong>: ওয়েবসাইটে অ্যাড পারফরম্যান্স
                 মাপা/ইভেন্ট পাঠানোর ব্রাউজার টুল।
               </div>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <div className="text-sm">
-                <strong>Conversions API (CAPI)</strong>: সার্ভার-সাইডে একই
-                ইভেন্টের কপি পাঠিয়ে মাপা আরও নির্ভুল করা।
+                <strong>Events API</strong>: সার্ভার-সাইডে একই ইভেন্টের কপি
+                পাঠিয়ে মাপা আরও নির্ভুল করা।
               </div>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <div className="text-sm">
-                <strong>Independent Controller</strong>: কিছু প্রসেসিং-এ আমরা ও
-                Meta আলাদা কন্ট্রোলার হিসেবে ডেটা প্রক্রিয়া করি।
+                <strong>Independent Controller</strong>: কিছু প্রসেসিং-এ আমরা
+                ও বিজ্ঞাপন পার্টনাররা আলাদা কন্ট্রোলার হিসেবে ডেটা প্রক্রিয়া
+                করি।
               </div>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">

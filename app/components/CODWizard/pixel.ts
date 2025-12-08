@@ -1,13 +1,10 @@
 "use client";
 
-import { fbq, newEventId, FB_PIXEL_ID } from "@/app/lib/fbpixel";
-import { readFBP, readFBC } from "@/lib/fbcookies";
-import { fbqInitOnce } from "@/lib/fbpixelInitOnce";
+import { newEventId } from "@/app/lib/eventIds";
 import { ttqTrack, ttqIdentifyOnce, normalizePhoneBD } from "@/app/lib/tiktok";
 
 import {
   CURRENCY,
-  PRODUCT_CATEGORY,
   PRODUCT_ID,
   PRODUCT_NAME,
   TT_PRODUCT_CATEGORY,
@@ -16,55 +13,11 @@ import {
 import {
   baseUrl,
   contentsForCAPI,
-  contentsForPixel,
-  guessCityFromAddress,
-  phoneE164BD,
-  splitName,
 } from "./event-helpers";
 import type { Bundle } from "./types";
 
-/** AddToCart (FB + CAPI) */
-export async function emitAddToCart(bundle: Bundle) {
-  const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
-  const eventID = `atc-${newEventId()}`;
-
-  fbq(
-    "track",
-    "AddToCart",
-    {
-      currency: CURRENCY,
-      value,
-      content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForPixel(bundle.qty),
-      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-    },
-    { eventID }
-  );
-
-  await fetch("/api/meta/addtocart", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      event_id: eventID,
-      event_source_url: baseUrl(),
-      currency: CURRENCY,
-      value,
-      num_items: bundle.qty,
-      content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForCAPI(bundle.qty),
-      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-      fbp: readFBP(),
-      fbc: readFBC(),
-    }),
-  }).catch(() => {});
-}
-
 /** TikTok AddToCart (matches v1) */
-export async function ttkAddToCart(bundle: Bundle) {
+export async function trackTikTokAddToCart(bundle: Bundle) {
   const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
   const eventID = `tt-atc-${newEventId()}`;
 
@@ -116,72 +69,8 @@ export async function ttkAddToCart(bundle: Bundle) {
     .catch(() => {});
 }
 
-/** InitiateCheckout (FB + CAPI) */
-export async function emitInitiateCheckout(
-  bundle: Bundle,
-  customer: { name?: string; phone?: string; address?: string }
-) {
-  const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
-  const eventID = `ic-${newEventId()}`;
-
-  try {
-    if (FB_PIXEL_ID) {
-      const { fn, ln } = splitName(customer.name);
-      const ph = phoneE164BD(customer.phone);
-      const ct = guessCityFromAddress(customer.address);
-      fbqInitOnce(FB_PIXEL_ID, {
-        ph,
-        fn,
-        ln,
-        ct,
-        country: "bd",
-        external_id: ph || undefined,
-      });
-    }
-  } catch {}
-
-  fbq(
-    "track",
-    "InitiateCheckout",
-    {
-      currency: CURRENCY,
-      value,
-      num_items: bundle.qty,
-      content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForPixel(bundle.qty),
-      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-    },
-    { eventID }
-  );
-
-  await fetch("/api/meta/initiatecheckout", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      event_id: eventID,
-      event_source_url: baseUrl(),
-      currency: CURRENCY,
-      value,
-      num_items: bundle.qty,
-      content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForCAPI(bundle.qty),
-      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-      name: customer.name,
-      phone: customer.phone,
-      city: guessCityFromAddress(customer.address),
-      country: "bd",
-      fbp: readFBP(),
-      fbc: readFBC(),
-    }),
-  }).catch(() => {});
-}
-
 /** TikTok InitiateCheckout (matches v1) */
-export async function ttkInitiateCheckout(
+export async function trackTikTokInitiateCheckout(
   bundle: Bundle,
   customer: { name?: string; phone?: string; address?: string }
 ) {
@@ -242,8 +131,8 @@ export async function ttkInitiateCheckout(
     .catch(() => {});
 }
 
-/** Purchase (FB + CAPI) — TT handled inline in index.tsx */
-export async function emitPurchase(
+/** TikTok Purchase */
+export async function trackTikTokPurchase(
   bundle: Bundle,
   customer: { name?: string; phone?: string; address?: string },
   forcedOrderId?: string
@@ -251,46 +140,50 @@ export async function emitPurchase(
   const value = bundle.qty * UNIT_PRICE - bundle.discountBDT;
   const orderId =
     forcedOrderId ?? `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-  const eventID = `pur-${newEventId()}`;
+  const eventID = `tt-pur-${newEventId()}`;
 
-  fbq(
-    "track",
+  await ttqIdentifyOnce({
+    phone: customer.phone,
+    external_id: normalizePhoneBD(customer.phone || ""),
+  });
+
+  ttqTrack(
     "Purchase",
     {
-      currency: CURRENCY,
+      contents: [
+        {
+          content_id: PRODUCT_ID,
+          content_type: "product",
+          content_name: `${PRODUCT_NAME} — ${bundle.label}`,
+          content_category: TT_PRODUCT_CATEGORY,
+          price: UNIT_PRICE,
+          num_items: bundle.qty,
+          brand: "Night Horse",
+        },
+      ],
       value,
-      num_items: bundle.qty,
-      content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForPixel(bundle.qty),
-      content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-      order_id: orderId,
+      currency: CURRENCY,
     },
-    { eventID }
+    eventID
   );
 
-  await fetch("/api/meta/purchase", {
+  await fetch("/api/tiktok/purchase", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       event_id: eventID,
       event_source_url: baseUrl(),
-      currency: CURRENCY,
       value,
+      currency: CURRENCY,
       order_id: orderId,
-      num_items: bundle.qty,
       content_type: "product",
-      content_ids: [PRODUCT_ID],
-      contents: contentsForCAPI(bundle.qty),
       content_name: `${PRODUCT_NAME} — ${bundle.label}`,
-      content_category: PRODUCT_CATEGORY,
-      name: customer.name,
+      content_category: TT_PRODUCT_CATEGORY,
+      contents: contentsForCAPI(bundle.qty),
       phone: customer.phone,
-      city: guessCityFromAddress(customer.address),
-      country: "bd",
-      fbp: readFBP(),
-      fbc: readFBC(),
+      name: customer.name,
+      address: customer.address,
+      external_id: normalizePhoneBD(customer.phone || ""),
     }),
   }).catch(() => {});
 

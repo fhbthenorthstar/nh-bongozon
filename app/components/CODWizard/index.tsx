@@ -1,9 +1,6 @@
 "use client";
 
 import { useMemo, useState, useRef, useEffect } from "react";
-import { ttqTrack, ttqIdentifyOnce, normalizePhoneBD } from "@/app/lib/tiktok";
-import { FB_PIXEL_ID, newEventId } from "@/app/lib/fbpixel";
-import { fbqInitOnce } from "@/lib/fbpixelInitOnce";
 
 import CourseStep from "./CourseStep";
 import DeliveryStep from "./DeliveryStep";
@@ -21,11 +18,9 @@ import { choicesFromBundle } from "./mapping";
 import type { Bundle, BundleKey } from "./types";
 
 import {
-  emitAddToCart,
-  ttkAddToCart,
-  emitInitiateCheckout,
-  ttkInitiateCheckout,
-  emitPurchase,
+  trackTikTokAddToCart,
+  trackTikTokInitiateCheckout,
+  trackTikTokPurchase,
 } from "./pixel";
 
 // ====== CONFIG ======
@@ -185,19 +180,13 @@ export default function OrderWizardv3({ channel = "Unknown" }) {
   const firedIC = useRef(false);
 
   useEffect(() => {
-    try {
-      if (FB_PIXEL_ID) fbqInitOnce(FB_PIXEL_ID, {});
-    } catch {}
-
     if (!firedATC.current) {
-      emitAddToCart(selected).catch(() => {});
-      ttkAddToCart(selected).catch(() => {});
+      trackTikTokAddToCart(selected).catch(() => {});
       firedATC.current = true;
     }
 
     if (!firedIC.current) {
-      emitInitiateCheckout(selected, {}).catch(() => {});
-      ttkInitiateCheckout(selected, {}).catch(() => {});
+      trackTikTokInitiateCheckout(selected, {}).catch(() => {});
       firedIC.current = true;
     }
 
@@ -333,73 +322,13 @@ export default function OrderWizardv3({ channel = "Unknown" }) {
 
                 // 2) Fire Purchase events regardless
                 const commonOrderId = `ORD-${Date.now()}`;
-                const fbInstant = emitPurchase(
+                const ttInstant = trackTikTokPurchase(
                   selected,
                   { name, phone, address },
                   commonOrderId
                 );
 
-                const ttInstant = (async () => {
-                  const value =
-                    selected.qty * UNIT_PRICE - selected.discountBDT;
-                  const eventID = `tt-pur-${newEventId()}`;
-                  await ttqIdentifyOnce({
-                    phone,
-                    external_id: normalizePhoneBD(phone || ""),
-                  });
-                  ttqTrack(
-                    "Purchase",
-                    {
-                      contents: [
-                        {
-                          content_id: PRODUCT_ID,
-                          content_type: "product",
-                          content_name: `${PRODUCT_NAME} — ${selected.label}`,
-                          content_category: TT_PRODUCT_CATEGORY,
-                          price: UNIT_PRICE,
-                          num_items: selected.qty,
-                          brand: "Night Horse",
-                        },
-                      ],
-                      value,
-                      currency: CURRENCY,
-                    },
-                    eventID
-                  );
-                  await fetch("/api/tiktok/purchase", {
-                    method: "POST",
-                    headers: { "content-type": "application/json" },
-                    body: JSON.stringify({
-                      event_id: eventID,
-                      event_source_url:
-                        typeof window !== "undefined"
-                          ? window.location.href
-                          : "",
-                      value,
-                      currency: CURRENCY,
-                      order_id: commonOrderId,
-                      content_type: "product",
-                      content_name: `${PRODUCT_NAME} — ${selected.label}`,
-                      content_category: TT_PRODUCT_CATEGORY,
-                      contents: [
-                        {
-                          id: PRODUCT_ID,
-                          item_price: UNIT_PRICE,
-                          quantity: selected.qty,
-                          brand: "Night Horse",
-                        },
-                      ],
-                      // --- START MODIFICATIONS ---
-                      phone: phone, // you already have this
-                      name: name, // <-- ADD THIS
-                      address: address, // <-- ADD THIS
-                      // --- END MODIFICATIONS ---
-                      external_id: normalizePhoneBD(phone || ""),
-                    }),
-                  }).catch(() => {});
-                })();
-
-                await Promise.allSettled([fbInstant, ttInstant]);
+                await Promise.allSettled([ttInstant]);
 
                 // 3) Discord fallback log
                 try {
