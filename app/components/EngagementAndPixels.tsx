@@ -1,7 +1,7 @@
 // app/components/EngagementAndPixels.tsx
 "use client";
 
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import FomoToast from "./FomoToast";
 import TikTokPageView from "./TikTokPageView";
@@ -17,7 +17,9 @@ export default function EngagementAndPixels({ children }: PropsWithChildren) {
   return (
     <>
       {children}
-      <TikTokPageView />
+      <Suspense fallback={null}>
+        <TikTokPageView />
+      </Suspense>
       <FomoToast />
     </>
   );
