@@ -7,7 +7,7 @@ import { ttqTrack } from "../lib/tiktok";
 const PRODUCT_ID = "night-horse-500g";
 const PRODUCT_NAME = "Night Horse";
 const PRODUCT_CATEGORY = "Beauty & Personal Care";
-const UNIT_PRICE = 1600;
+const UNIT_PRICE = 1200;
 const CURRENCY = "BDT";
 
 export default function ProductViewContentTikTok() {
