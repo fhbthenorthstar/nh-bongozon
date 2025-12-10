@@ -94,46 +94,6 @@ export default function FaqSection() {
           })}
         </div>
 
-        {/* Disclaimer / policy block under FAQ (styled for dark bg) */}
-        <div className="mt-10 sm:mt-12">
-          <div className="mx-auto max-w-5xl">
-            {/* Glass warning card */}
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 ring-1 ring-rose-400/15 backdrop-blur-md shadow-2xl antialiased">
-              {/* soft red/amber glow washes */}
-              <div className="pointer-events-none absolute inset-x-0 -top-28 h-56 bg-gradient-to-b from-rose-500/15 to-transparent blur-2xl" />
-              <div className="pointer-events-none absolute inset-x-0 -bottom-28 h-56 bg-gradient-to-t from-amber-400/10 to-transparent blur-2xl" />
-
-              <div className="relative px-5 sm:px-8 py-6 sm:py-8">
-                {/* pill badge */}
-                <div className="mx-auto w-fit">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-red-700 px-3 py-1 text-[12px] font-semibold text-white ring-1 ring-rose-300/30">
-                    টাকা না সুস্থতা আমাদের উদ্দেশ্য।
-                  </span>
-                </div>
-
-                {/* title */}
-                <h3 className="mt-3 text-center text-2xl sm:text-3xl font-extrabold tracking-tight">
-                  আপনার জানা জরুরি
-                </h3>
-
-                {/* main text */}
-                <p className="mx-auto mt-3  text-center sm:mt-4 max-w-3xl text-balance text-white text-[13.5px] sm:text-[16px] leading-[1.9] tracking-[.01em]">
-                  ডেলিভারি চার্জ <strong className="text-white">ফ্রি*</strong>{" "}
-                  আপনি ১০০% নিশ্চিত না হয়ে যদি অর্ডার করতে চান বা আগামী ২–৪
-                  দিনের মধ্যে আপনার দেয়া লোকেশনে পার্সেল রিসিভ করতে না পারেন
-                  তাহলে আপনি অর্ডার না করলেই আমরা খুশি হবো। কারণ এখন আপনি অর্ডার
-                  করলে, ২–৪ ঘন্টার মধ্যে আমাদের টিম ফোন দিয়ে কনফার্ম করবে, তারপর
-                  আপনার জন্য পার্সেল প্যাক করতে হবে (নাইট হর্স কাঁচের জারে থাকে,
-                  তাই অতিরিক্ত যত্ন লাগে) এবং কুরিয়ারে পাঠাতেও ৮০–১৩৫ টাকা খরচ
-                  হয়। শেষে ডেলিভারিম্যান যখন আপনার লোকেশনে পৌঁছাবে - একবার
-                  ভাবুন, আপনি যদি না নেন/রিটার্ন করেন/ ফোন না ধরেন - কতজনের সময়,
-                  শ্রম ও নগদ টাকার ক্ষতি হয়। দয়া করে অন্যের ক্ষতি করা থেকে বিরত
-                  থাকুন।
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
