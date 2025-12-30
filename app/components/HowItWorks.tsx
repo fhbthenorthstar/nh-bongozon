@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import MuxVideo from "./MuxVideo";
 
 type Card = {
   id: number;
@@ -166,13 +167,9 @@ export default function HowItWorks() {
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            নাইট হর্সের উপাদান সমূহ
+            উপাদান সমূহ
           </h2>
-          <p className="mt-3 text-white">
-            বাংলাদেশে এখনো কেও ৩২টি উপাদানের সংমিশ্রনে এই পণ্য তৈরি করে না। সবাই
-            ৮-১০ উপাদান ব্যবহার করে তাই আমরা নিয়ে এসেছি ৩২টি উপাদানের সংমিশ্রণ
-            যা আপনার দুর্বলতাকে গোড়া থেকে ধংস করবে ইনশাল্লাহ।
-          </p>
+         
         </div>
 
         {/* Cards */}
@@ -193,7 +190,10 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
-
+        <MuxVideo
+          playbackId="SOaq3008ZDqi01YtWvtx62qnLWtDmidy8InhAd3sUIFPI"
+          poster="https://image.mux.com/SOaq3008ZDqi01YtWvtx62qnLWtDmidy8InhAd3sUIFPI/animated.gif?width=320"
+        />
         {/* CTA (unchanged) */}
         <div className="mt-7 md:mt-10 flex justify-center px-4">
           <Link
